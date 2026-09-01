@@ -1,80 +1,10 @@
 /* ============================================================================
-   GC DOC — shared styling for the Grand Chancellor's document forms.
+   GC DOC — the document machinery: the form panel beside the sheet, the sheet
+   itself at its real size, and the layout of a patent.
 
-   Three parts:
-     1. the application chrome (menu, form panel, buttons, preview stage)
-     2. the sheet itself, at its real size
-     3. the patent layout — the artwork positions and the body copy
-
-   The artwork and the two display faces live in artwork.js and fonts.css.
+   The chrome around it (the top bar, the menus) is in portal.css, which every
+   page loads first.
    ========================================================================= */
-
-:root{
-  --bg:#0a0a0b;
-  --surface:#151516;
-  --surface-2:#1c1c1e;
-  --stitch:#2c2c2e;
-  --steel:#b9bec7;
-  --gold:#ad8a4e;
-  --gold-bright:#cba867;
-  --bone:#e9e6dd;
-  --bone-dim:#a9a69c;
-  --crimson:#9e1b1f;
-  --ink:#2F5496;              /* the blue of the source document */
-
-  /* A3 portrait — the size of the source document. */
-  --page-w:11.6963in;
-  --page-h:16.5in;
-}
-*{box-sizing:border-box;}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--bone);
-  font-family:'EB Garamond','Times New Roman',serif;
-  font-size:17px;
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-}
-a{color:inherit;}
-
-/* ---------- 1. application chrome ---------------------------------------- */
-
-.top{
-  position:sticky; top:0; z-index:50;
-  display:flex; align-items:center; justify-content:space-between; gap:20px;
-  padding:14px 26px;
-  background:rgba(10,10,11,.94);
-  border-bottom:1px solid var(--stitch);
-  backdrop-filter:blur(8px);
-}
-.top h1{
-  margin:0;
-  font-family:'Cinzel',serif; font-weight:700;
-  font-size:16px; letter-spacing:.12em; text-transform:uppercase; color:var(--bone);
-}
-.top .sub{
-  display:block; margin-top:3px;
-  font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.22em;
-  text-transform:uppercase; color:var(--gold-bright);
-}
-.top .back{
-  display:inline-block; margin-bottom:4px;
-  font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.18em;
-  text-transform:uppercase; color:var(--bone-dim); text-decoration:none;
-}
-.top .back:hover{color:var(--gold-bright);}
-.actions{display:flex; gap:10px; flex-wrap:wrap;}
-.btn{
-  font-family:'Oswald',sans-serif; letter-spacing:.14em; text-transform:uppercase; font-size:12px;
-  padding:11px 20px; border:1px solid var(--gold); color:var(--bone);
-  background:transparent; cursor:pointer; transition:.15s; text-decoration:none;
-  display:inline-block;
-}
-.btn:hover{background:var(--gold); color:#111;}
-.btn.solid{background:var(--crimson); border-color:var(--crimson); color:#fff;}
-.btn.solid:hover{background:#c22a2a; border-color:#c22a2a;}
-.btn[disabled]{opacity:.55; cursor:progress;}
 
 main{
   display:grid;
@@ -122,47 +52,6 @@ main{
 .note{font-size:13.5px; color:var(--bone-dim); line-height:1.55;}
 .note b{color:var(--bone); font-weight:600;}
 .status{margin-top:14px; font-size:13.5px; color:var(--gold-bright); min-height:1.2em;}
-
-/* ---------- the menu ------------------------------------------------------ */
-
-.menu-wrap{max-width:1000px; margin:0 auto; padding:34px 26px 60px;}
-.menu-wrap .lede{
-  margin:0 0 30px; max-width:64ch; color:var(--bone-dim); font-size:18px;
-}
-.menu-group{
-  margin:0 0 14px;
-  font-family:'Oswald',sans-serif; font-size:11.5px; letter-spacing:.24em;
-  text-transform:uppercase; color:var(--gold-bright);
-}
-.doc-grid{
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:16px; margin-bottom:36px;
-}
-.doc-card{
-  display:block; text-decoration:none;
-  position:relative; overflow:hidden;
-  background:linear-gradient(180deg,var(--surface),var(--surface-2));
-  border:1px solid var(--stitch);
-  outline:1px solid rgba(185,190,199,.12);
-  outline-offset:-5px;
-  padding:22px 22px 20px;
-  transition:.15s;
-}
-.doc-card:hover{border-color:var(--gold); outline-color:rgba(173,138,78,.35);}
-.doc-card h3{
-  margin:0 0 8px;
-  font-family:'Cinzel',serif; font-size:17px; letter-spacing:.04em; color:var(--bone);
-}
-.doc-card p{margin:0; font-size:15px; color:var(--bone-dim); line-height:1.5;}
-.doc-card .tag{
-  display:inline-block; margin-bottom:12px;
-  font-family:'Oswald',sans-serif; font-size:10px; letter-spacing:.2em;
-  text-transform:uppercase; color:var(--gold-bright);
-  border:1px solid rgba(173,138,78,.45); padding:3px 9px;
-}
-.doc-card.soon{opacity:.62; cursor:default;}
-.doc-card.soon:hover{border-color:var(--stitch); outline-color:rgba(185,190,199,.12);}
-.doc-card.soon .tag{color:var(--steel); border-color:rgba(185,190,199,.3);}
 
 /* ---------- 2. the sheet -------------------------------------------------- */
 
