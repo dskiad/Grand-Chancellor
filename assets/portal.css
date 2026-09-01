@@ -84,6 +84,7 @@ a{color:inherit;}
 }
 .offices a:hover{color:var(--bone);}
 .offices a[aria-current="page"]{color:var(--gold-bright); border-color:var(--gold);}
+.offices em{font-style:normal; color:var(--steel); opacity:.7;}
 
 /* ---------- the menu ------------------------------------------------------ */
 
