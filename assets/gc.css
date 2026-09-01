@@ -1,0 +1,259 @@
+/* ============================================================================
+   GC DOC — shared styling for the Grand Chancellor's document forms.
+
+   Three parts:
+     1. the application chrome (menu, form panel, buttons, preview stage)
+     2. the sheet itself, at its real size
+     3. the patent layout — the artwork positions and the body copy
+
+   The artwork and the two display faces live in artwork.js and fonts.css.
+   ========================================================================= */
+
+:root{
+  --bg:#0a0a0b;
+  --surface:#151516;
+  --surface-2:#1c1c1e;
+  --stitch:#2c2c2e;
+  --steel:#b9bec7;
+  --gold:#ad8a4e;
+  --gold-bright:#cba867;
+  --bone:#e9e6dd;
+  --bone-dim:#a9a69c;
+  --crimson:#9e1b1f;
+  --ink:#2F5496;              /* the blue of the source document */
+
+  /* A3 portrait — the size of the source document. */
+  --page-w:11.6963in;
+  --page-h:16.5in;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--bone);
+  font-family:'EB Garamond','Times New Roman',serif;
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+
+/* ---------- 1. application chrome ---------------------------------------- */
+
+.top{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:14px 26px;
+  background:rgba(10,10,11,.94);
+  border-bottom:1px solid var(--stitch);
+  backdrop-filter:blur(8px);
+}
+.top h1{
+  margin:0;
+  font-family:'Cinzel',serif; font-weight:700;
+  font-size:16px; letter-spacing:.12em; text-transform:uppercase; color:var(--bone);
+}
+.top .sub{
+  display:block; margin-top:3px;
+  font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--gold-bright);
+}
+.top .back{
+  display:inline-block; margin-bottom:4px;
+  font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--bone-dim); text-decoration:none;
+}
+.top .back:hover{color:var(--gold-bright);}
+.actions{display:flex; gap:10px; flex-wrap:wrap;}
+.btn{
+  font-family:'Oswald',sans-serif; letter-spacing:.14em; text-transform:uppercase; font-size:12px;
+  padding:11px 20px; border:1px solid var(--gold); color:var(--bone);
+  background:transparent; cursor:pointer; transition:.15s; text-decoration:none;
+  display:inline-block;
+}
+.btn:hover{background:var(--gold); color:#111;}
+.btn.solid{background:var(--crimson); border-color:var(--crimson); color:#fff;}
+.btn.solid:hover{background:#c22a2a; border-color:#c22a2a;}
+.btn[disabled]{opacity:.55; cursor:progress;}
+
+main{
+  display:grid;
+  grid-template-columns:390px minmax(0,1fr);
+  gap:26px;
+  padding:26px;
+  align-items:start;
+}
+@media (max-width:1080px){ main{grid-template-columns:1fr;} }
+
+.panel{
+  position:sticky; top:96px;
+  background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  border:1px solid var(--stitch);
+  outline:1px solid rgba(185,190,199,.12);
+  outline-offset:-5px;
+  padding:24px;
+}
+@media (max-width:1080px){ .panel{position:static;} }
+.panel h2{
+  margin:0 0 4px;
+  font-family:'Cinzel',serif; font-size:15px; letter-spacing:.1em; text-transform:uppercase;
+}
+.panel .hint{margin:0 0 20px; font-size:14px; color:var(--bone-dim); font-style:italic;}
+.field{margin-bottom:16px;}
+.field label{
+  display:block; margin-bottom:6px;
+  font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--gold-bright);
+}
+.field label i{
+  font-family:'EB Garamond',serif; font-style:italic; letter-spacing:.02em;
+  font-size:13px; text-transform:none; color:var(--bone-dim);
+}
+.field input,.field textarea{
+  width:100%; padding:10px 12px;
+  background:#0f0f10; border:1px solid var(--stitch); color:var(--bone);
+  font-family:'EB Garamond',serif; font-size:16px; line-height:1.45;
+  border-radius:2px;
+}
+.field textarea{resize:vertical; min-height:76px;}
+.field input:focus,.field textarea:focus{outline:none; border-color:var(--gold); background:#121213;}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.divider{border:0; border-top:1px solid var(--stitch); margin:22px 0 18px;}
+.note{font-size:13.5px; color:var(--bone-dim); line-height:1.55;}
+.note b{color:var(--bone); font-weight:600;}
+.status{margin-top:14px; font-size:13.5px; color:var(--gold-bright); min-height:1.2em;}
+
+/* ---------- the menu ------------------------------------------------------ */
+
+.menu-wrap{max-width:1000px; margin:0 auto; padding:34px 26px 60px;}
+.menu-wrap .lede{
+  margin:0 0 30px; max-width:64ch; color:var(--bone-dim); font-size:18px;
+}
+.menu-group{
+  margin:0 0 14px;
+  font-family:'Oswald',sans-serif; font-size:11.5px; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--gold-bright);
+}
+.doc-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:16px; margin-bottom:36px;
+}
+.doc-card{
+  display:block; text-decoration:none;
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  border:1px solid var(--stitch);
+  outline:1px solid rgba(185,190,199,.12);
+  outline-offset:-5px;
+  padding:22px 22px 20px;
+  transition:.15s;
+}
+.doc-card:hover{border-color:var(--gold); outline-color:rgba(173,138,78,.35);}
+.doc-card h3{
+  margin:0 0 8px;
+  font-family:'Cinzel',serif; font-size:17px; letter-spacing:.04em; color:var(--bone);
+}
+.doc-card p{margin:0; font-size:15px; color:var(--bone-dim); line-height:1.5;}
+.doc-card .tag{
+  display:inline-block; margin-bottom:12px;
+  font-family:'Oswald',sans-serif; font-size:10px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--gold-bright);
+  border:1px solid rgba(173,138,78,.45); padding:3px 9px;
+}
+.doc-card.soon{opacity:.62; cursor:default;}
+.doc-card.soon:hover{border-color:var(--stitch); outline-color:rgba(185,190,199,.12);}
+.doc-card.soon .tag{color:var(--steel); border-color:rgba(185,190,199,.3);}
+
+/* ---------- 2. the sheet -------------------------------------------------- */
+
+.stage{display:flex; justify-content:center;}
+.scaler{position:relative;}
+.paper{
+  position:relative;
+  width:var(--page-w); height:var(--page-h);
+  background:#fff; color:#000;
+  overflow:hidden;
+  transform-origin:top left;
+  box-shadow:0 24px 70px rgba(0,0,0,.6);
+}
+.paper img{display:block; position:absolute;}
+
+/* ---------- 3. the patent ------------------------------------------------- */
+
+.art-header{left:0.8047in; top:0.1887in; width:9.9740in; height:4.4914in;}
+.art-frame{left:0.5534in; top:4.6801in; width:10.6867in; height:11.6116in;}
+.art-seal{left:4.6554in; top:13.9998in; width:2.2188in; height:2.2398in; z-index:3;}
+
+.body-copy{
+  /* The clear window inside the chain collar — measured off the artwork:
+     6.28in to 12.73in down the sheet. The copy is centred in it and, like
+     PowerPoint's "shrink text on overflow", scales down (--k) when a long
+     rank or Grand Lodge name needs more room. */
+  position:absolute;
+  left:1.85in; top:6.28in; width:8.00in; height:6.45in;
+  display:flex; flex-direction:column; justify-content:center;
+  z-index:2;
+  --k:1;
+}
+.body-copy p{margin:0;}
+
+.script{
+  font-family:'Great Vibes','Segoe Script',cursive;
+  font-weight:700; line-height:1.2;
+}
+.roman{
+  font-family:'Palatino Linotype','Book Antiqua',Palatino,'URW Palladio L','TeX Gyre Pagella','EB Garamond',Georgia,serif;
+  font-weight:700; line-height:1.22;
+}
+
+.lead{font-size:calc(32pt * var(--k)); text-align:left;}
+.dropcap{
+  position:static !important;
+  float:left;
+  width:calc(1.3728in * var(--k)); height:auto;
+  margin:-0.02in 0.05in -0.08in 0;
+}
+.hisrank{
+  clear:both;
+  margin-top:.85em !important;
+  font-style:italic; font-size:calc(22pt * var(--k));
+  text-align:center;
+}
+.name,.rank,.lodge{
+  font-family:'Cinzel Decorative','Cinzel',serif;
+  font-weight:700; font-size:calc(23pt * var(--k)); line-height:1.18;
+  color:var(--ink); text-align:center;
+}
+.connector{
+  font-style:italic; font-size:calc(21pt * var(--k));
+  text-align:center;
+}
+.name{margin-top:1.05em !important;}
+.connector.appointed{margin-top:.34em !important;}
+.rank{margin-top:.5em !important;}
+.connector.ofthe{margin-top:.34em !important;}
+.lodge{margin-top:.2em !important;}
+.testimony{font-size:calc(31pt * var(--k)); text-align:center;}
+.testimony.first{margin-top:.75em !important;}
+.testimony.date{margin-top:.38em !important;}
+
+.sig{position:absolute; z-index:3; text-align:center;}
+.sig .sig-img{position:static !important; margin:0 auto;}
+.sig .rule{border-top:0.75pt dashed #000; width:100%; margin:0.06in auto 0.07in;}
+.sig p{margin:0; font-size:14pt; line-height:1.35;}
+.sig-left{left:0.7546in; top:14.1554in; width:3.1253in;}
+.sig-left .sig-img{width:2.6561in; height:0.6447in;}
+.sig-right{left:7.9724in; top:13.8480in; width:3.1253in;}
+.sig-right .sig-img{width:2.5866in; height:1.0118in;}
+
+/* ---------- print --------------------------------------------------------- */
+
+@media print{
+  @page{ size:11.6963in 16.5in; margin:0; }
+  body{background:#fff;}
+  .top,.panel,.status{display:none !important;}
+  main{display:block; padding:0;}
+  .stage{display:block;}
+  .scaler{width:auto !important; height:auto !important;}
+  .paper{transform:none !important; box-shadow:none; margin:0;}
+}
