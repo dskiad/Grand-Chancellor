@@ -77,16 +77,37 @@ main{
 /* ---------- 3. the patent ------------------------------------------------- */
 
 .art-header{left:0.8047in; top:0.1887in; width:9.9740in; height:4.4914in;}
-.art-frame{left:0.5534in; top:4.6801in; width:10.6867in; height:11.6116in;}
+.art-frame{
+  left:0.5534in; top:4.6801in; width:10.6867in; height:11.6116in;
+
+  /* Widen the chain collar so its medallion columns clear the text —
+     the color artwork's clear window is narrower than the old line-art's,
+     so the copy was overlapping the left/right columns. Edit these two
+     to retune: scale-x pushes the left/right columns outward (>1 wider,
+     <1 narrower); scale-y stretches the top/bottom rows the same way.
+     Anchored at top-center so the top edge stays put against the header
+     and the extra width comes out evenly on the left and right. */
+  --frame-scale-x:1.10;
+  --frame-scale-y:1;
+  transform:scaleX(var(--frame-scale-x)) scaleY(var(--frame-scale-y));
+  transform-origin:50% 0%;
+}
 .art-seal{left:4.6554in; top:13.9998in; width:2.2188in; height:2.2398in; z-index:3;}
 
 .body-copy{
   /* The clear window inside the chain collar — measured off the artwork:
      6.28in to 12.73in down the sheet. The copy is centred in it and, like
      PowerPoint's "shrink text on overflow", scales down (--k) when a long
-     rank or Grand Lodge name needs more room. */
+     rank or Grand Lodge name needs more room.
+
+     Left/width pulled in ~0.5in per side (was 1.85in/8.00in) from the
+     color chain's own clear window, which is narrower than the old
+     line-art's even with --frame-scale-x widening the columns above —
+     the frame can't scale much past that without its edges clipping the
+     page, so this closes the rest of the gap so text never sits under
+     the medallions. */
   position:absolute;
-  left:1.85in; top:6.28in; width:8.00in; height:6.45in;
+  left:2.35in; top:6.28in; width:7.00in; height:6.45in;
   display:flex; flex-direction:column; justify-content:center;
   z-index:2;
   --k:1;
