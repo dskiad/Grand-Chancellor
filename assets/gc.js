@@ -5,20 +5,28 @@
 
      * <img data-art="header">        gets its artwork from artwork.js
      * <input data-field="name">      writes into every <span data-out="name">
-     * <input type="date" data-day="f-day" data-monthyear="f-monthyear">
-                                      fills those two fields as "24th" and
-                                      "October 2025"
+     * <input data-day="f-day" data-monthyear="f-monthyear">
+                                      typed as "DD/MM/YYYY" (day first, the
+                                      order this whole tool uses — never
+                                      month first); fills those two fields
+                                      as "24th" and "October 2025"
      * <select data-field="type">    a choice field behaves like any other
                                       data-field — read with its current
                                       option's value
      * <p data-show="type:HONORARY"> only shown while the field named
                                       data-field="type" currently holds
-                                      "HONORARY"
+                                      "HONORARY"; the rest of the copy
+                                      simply flows up to close the gap —
+                                      no extra wiring needed
      * <div class="body-copy"><div class="copy">…</div></div>
                                       the copy is scaled down until it fits
      * #pdf / #print / #reset         the three buttons
      * <body data-doc="Honorary Patent" data-file="name,rank">
                                       names the downloaded file
+
+   Every text field and textarea also remembers what was typed into it
+   before, per page, in the browser's own storage. A small picker appears
+   under a field once it has history, offering past entries to reuse.
 
    Everything needed to render and export lives in this folder, so the forms
    work with no network connection.
@@ -33,7 +41,7 @@
   var win     = document.querySelector('.body-copy');
   var copy    = document.querySelector('.body-copy .copy');
   var inputs  = [].slice.call(document.querySelectorAll('[data-field]'));
-  var dateIn  = document.querySelector('input[type="date"][data-day]');
+  var dateIn  = document.querySelector('[data-day][data-monthyear]');
 
   if (!paper) return;
 
@@ -89,15 +97,110 @@
     }
   }
 
+  /* Typed as "DD/MM/YYYY" — day first, throughout this tool — never
+     month first. Typing bare digits ("25122026") auto-inserts the two
+     slashes as you go. The moment a "/", "-" or "." is typed by hand,
+     auto-inserting stands down for the rest of that entry — so a
+     deliberate single-digit day or month ("5/3/2027") is never fought
+     over mid-edit. Either way the parser below accepts "-" or "." too. */
+  function maskDate(el, typedChar){
+    if (el.value === '') el._autoMask = true;
+    if (typedChar && /[\/\-.]/.test(typedChar)) el._autoMask = false;
+    if (el._autoMask === false) return;
+
+    var digits = el.value.replace(/[^\d]/g, '').slice(0, 8);
+    var out = digits;
+    if (digits.length > 4)      out = digits.slice(0,2) + '/' + digits.slice(2,4) + '/' + digits.slice(4);
+    else if (digits.length > 2) out = digits.slice(0,2) + '/' + digits.slice(2);
+    el.value = out;
+  }
+
   function fromDate(){
-    var v = dateIn.value;                       /* yyyy-mm-dd */
-    if (!v) return;
-    var p = v.split('-');
-    var day = document.getElementById(dateIn.getAttribute('data-day'));
-    var my  = document.getElementById(dateIn.getAttribute('data-monthyear'));
-    if (day) day.value = ordinal(parseInt(p[2], 10));
-    if (my)  my.value  = MONTHS[parseInt(p[1], 10) - 1] + ' ' + p[0];
+    var m = /^\s*(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})\s*$/.exec(dateIn.value);
+    if (!m) return;
+    var day = parseInt(m[1], 10), month = parseInt(m[2], 10), year = m[3];
+    if (day < 1 || day > 31 || month < 1 || month > 12) return;
+    var dayEl = document.getElementById(dateIn.getAttribute('data-day'));
+    var my    = document.getElementById(dateIn.getAttribute('data-monthyear'));
+    if (dayEl) dayEl.value = ordinal(day);
+    if (my)    my.value    = MONTHS[month - 1] + ' ' + year;
     render();
+  }
+
+  /* ---------- history ------------------------------------------------------ */
+
+  /* Every text field and textarea remembers what was typed into it before,
+     per page (localStorage, keyed by the field's id under this page's own
+     path — so different forms never mix their history). A small picker
+     appears under a field once it has entries to offer. */
+
+  var HISTORY_MAX = 12;
+
+  var historyEls = inputs
+    .filter(function(el){ return el.tagName !== 'SELECT'; })
+    .concat(dateIn ? [dateIn] : []);
+
+  function historyKey(id){
+    return 'gcHistory:' + location.pathname + ':' + id;
+  }
+
+  function loadHistory(id){
+    try {
+      var raw = window.localStorage.getItem(historyKey(id));
+      return raw ? JSON.parse(raw) : [];
+    } catch (e){ return []; }
+  }
+
+  function saveHistory(id, value){
+    value = (value || '').trim();
+    if (!value) return;
+    try {
+      var list = loadHistory(id).filter(function(v){ return v !== value; });
+      list.unshift(value);
+      if (list.length > HISTORY_MAX) list.length = HISTORY_MAX;
+      window.localStorage.setItem(historyKey(id), JSON.stringify(list));
+    } catch (e){ /* storage unavailable — the field still works, it just won't be remembered */ }
+  }
+
+  function buildHistoryPicker(el){
+    var wrap = el.closest ? el.closest('.field') : null;
+    if (!wrap) return;
+    var existing = wrap.querySelector('.history-pick');
+    if (existing) existing.parentNode.removeChild(existing);
+
+    var list = loadHistory(el.id);
+    if (!list.length) return;
+
+    var picker = document.createElement('select');
+    picker.className = 'history-pick';
+    picker.setAttribute('aria-label', 'Previously used values for this field');
+
+    var placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Use a previous entry…';
+    picker.appendChild(placeholder);
+
+    list.forEach(function(v){
+      var opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = v.length > 64 ? v.slice(0, 61) + '…' : v;
+      picker.appendChild(opt);
+    });
+
+    picker.addEventListener('change', function(){
+      if (!picker.value) return;
+      el.value = picker.value;
+      picker.value = '';
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+      el.focus();
+    });
+
+    wrap.appendChild(picker);
+  }
+
+  function refreshHistoryPickers(){
+    historyEls.forEach(buildHistoryPicker);
   }
 
   /* ---------- fitting ------------------------------------------------------ */
@@ -214,7 +317,13 @@
   var form = document.getElementById('form');
   if (form){
     form.addEventListener('input', function(e){
-      if (dateIn && e.target === dateIn) fromDate(); else render();
+      if (dateIn && e.target === dateIn){ maskDate(dateIn, e.data); fromDate(); }
+      else render();
+    });
+    form.addEventListener('change', function(e){
+      if (historyEls.indexOf(e.target) === -1) return;
+      saveHistory(e.target.id, e.target.value);
+      refreshHistoryPickers();
     });
   }
 
@@ -246,6 +355,7 @@
   window.addEventListener('resize', fit);
 
   render();
+  refreshHistoryPickers();
   fit();
   if (document.fonts && document.fonts.ready){
     document.fonts.ready.then(function(){ render(); fit(); });
