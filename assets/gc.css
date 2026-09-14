@@ -39,14 +39,14 @@ main{
   font-family:'EB Garamond',serif; font-style:italic; letter-spacing:.02em;
   font-size:13px; text-transform:none; color:var(--bone-dim);
 }
-.field input,.field textarea{
+.field input,.field textarea,.field select{
   width:100%; padding:10px 12px;
   background:#0f0f10; border:1px solid var(--stitch); color:var(--bone);
   font-family:'EB Garamond',serif; font-size:16px; line-height:1.45;
   border-radius:2px;
 }
 .field textarea{resize:vertical; min-height:76px;}
-.field input:focus,.field textarea:focus{outline:none; border-color:var(--gold); background:#121213;}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none; border-color:var(--gold); background:#121213;}
 .row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
 .divider{border:0; border-top:1px solid var(--stitch); margin:22px 0 18px;}
 .note{font-size:13.5px; color:var(--bone-dim); line-height:1.55;}
@@ -121,6 +121,7 @@ main{
 .connector.appointed{margin-top:.34em !important;}
 .rank{margin-top:.5em !important;}
 .connector.ofthe{margin-top:.34em !important;}
+.connector.honorary-tail{margin-top:.34em !important;}
 .lodge{margin-top:.2em !important;}
 .testimony{font-size:calc(31pt * var(--k)); text-align:center;}
 .testimony.first{margin-top:.75em !important;}

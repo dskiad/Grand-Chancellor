@@ -8,6 +8,12 @@
      * <input type="date" data-day="f-day" data-monthyear="f-monthyear">
                                       fills those two fields as "24th" and
                                       "October 2025"
+     * <select data-field="type">    a choice field behaves like any other
+                                      data-field — read with its current
+                                      option's value
+     * <p data-show="type:HONORARY"> only shown while the field named
+                                      data-field="type" currently holds
+                                      "HONORARY"
      * <div class="body-copy"><div class="copy">…</div></div>
                                       the copy is scaled down until it fits
      * #pdf / #print / #reset         the three buttons
@@ -49,8 +55,21 @@
     [].forEach.call(targets, function(t){ t.textContent = el.value.trim(); });
   }
 
+  /* <p data-show="type:HONORARY"> only appears while the field named
+     data-field="type" is currently set to "HONORARY"; everything else
+     on the patent stays exactly as it is. */
+  function applyConditionals(){
+    [].forEach.call(document.querySelectorAll('[data-show]'), function(el){
+      var parts = el.getAttribute('data-show').split(':');
+      var field = document.querySelector('[data-field="' + parts[0] + '"]');
+      var value = field ? field.value.trim() : '';
+      el.hidden = (value !== parts[1]);
+    });
+  }
+
   function render(){
     inputs.forEach(write);
+    applyConditionals();
     autofit();
   }
 

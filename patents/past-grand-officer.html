@@ -53,6 +53,14 @@
     </div>
 
     <div class="field">
+      <label for="f-type">TYPE <i>— appointed or honorary</i></label>
+      <select id="f-type" data-field="type">
+        <option value="APPOINTED">Appointed</option>
+        <option value="HONORARY">Honorary</option>
+      </select>
+    </div>
+
+    <div class="field">
       <label for="f-rank">RANK <i>— appointed as</i></label>
       <input id="f-rank" data-field="rank" type="text" list="past-ranks" value="PAST GRAND MASTER">
       <datalist id="past-ranks">
@@ -110,10 +118,12 @@
             <p class="lead script"><img class="dropcap" data-art="dropcapF" alt="F">or his outstanding Masonic career, being a reference for the fraternity and an example to follow for all members of the Craft,</p>
             <p class="hisrank roman"><span data-out="hisrank"></span> <span data-out="hisgl"></span></p>
             <p class="name" data-out="name"></p>
-            <p class="connector roman appointed">Is Appointed As</p>
+            <p class="connector roman appointed" data-show="type:APPOINTED">Is Appointed As</p>
+            <p class="connector roman appointed" data-show="type:HONORARY">By virtue of this Patent, shall henceforth be recognised and received as an</p>
             <p class="rank" data-out="rank"></p>
             <p class="connector roman ofthe">of the</p>
             <p class="lodge">National Grand Lodge of Greece</p>
+            <p class="connector roman honorary-tail" data-show="type:HONORARY">entitled to all honours, courtesies and distinctions traditionally associated with such dignity, in accordance with the Constitution, Regulations and established usages of this Grand Lodge</p>
             <p class="testimony script first">In testimony Whereof we have hereunto set our hands and caused the seal of the National Grand Lodge of Greece</p>
             <p class="testimony script date">Masonic Hall of Athens, this <span data-out="day"></span> day of <span data-out="monthyear"></span> AD.</p>
           </div>
