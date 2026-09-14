@@ -30,6 +30,13 @@ main{
 }
 .panel .hint{margin:0 0 20px; font-size:14px; color:var(--bone-dim); font-style:italic;}
 .field{margin-bottom:16px;}
+.field .history-pick{
+  display:block; width:100%; margin-top:6px; padding:6px 10px;
+  background:#0f0f10; border:1px solid var(--stitch); color:var(--bone-dim);
+  font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.05em;
+  border-radius:2px;
+}
+.field .history-pick:focus{outline:none; border-color:var(--gold);}
 .field label{
   display:block; margin-bottom:6px;
   font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:.2em;
@@ -85,6 +92,10 @@ main{
   --k:1;
 }
 .body-copy p{margin:0;}
+/* A line hidden by data-show (e.g. HONORARY vs APPOINTED wording) takes no
+   space, so the flex column above simply recentres what's left — the rest
+   of the copy moves up to close the gap on its own. */
+.body-copy p[hidden]{display:none;}
 
 .script{
   font-family:'Great Vibes','Segoe Script',cursive;
