@@ -86,8 +86,13 @@ main{
      to retune: scale-x pushes the left/right columns outward (>1 wider,
      <1 narrower); scale-y stretches the top/bottom rows the same way.
      Anchored at top-center so the top edge stays put against the header
-     and the extra width comes out evenly on the left and right. */
-  --frame-scale-x:1.10;
+     and the extra width comes out evenly on the left and right.
+
+     1.20 = the chain's own artwork (not counting its built-in transparent
+     margin) now spans page-x 0.481in to 11.291in — 10.81in wide, centred
+     on an 11.6963in-wide sheet with 0.481in clear on the left and 0.405in
+     on the right, comfortably inside the page on both sides. */
+  --frame-scale-x:1.20;
   --frame-scale-y:1;
   transform:scaleX(var(--frame-scale-x)) scaleY(var(--frame-scale-y));
   transform-origin:50% 0%;
@@ -95,17 +100,23 @@ main{
 .art-seal{left:4.6554in; top:13.9998in; width:2.2188in; height:2.2398in; z-index:3;}
 
 .body-copy{
-  /* The clear window inside the chain collar — measured off the artwork:
-     6.28in to 12.73in down the sheet. The copy is centred in it and, like
-     PowerPoint's "shrink text on overflow", scales down (--k) when a long
-     rank or Grand Lodge name needs more room.
+  /* The clear window inside the chain collar — measured off the artwork.
+     The copy is centred in it and, like PowerPoint's "shrink text on
+     overflow", scales down (--k) when a long rank or Grand Lodge name
+     needs more room.
 
      Left/width re-measured against the current chain artwork's own clear
      window (with --frame-scale-x above applied) — swapping the frame
      image changes where its columns actually sit, so this box needs
-     rechecking whenever the artwork does. */
+     rechecking whenever the artwork does.
+
+     Top dropped 6.28in -> 6.45in: the new artwork's top row of medallions
+     doesn't fully clear until 6.369in down the sheet, so the old top let
+     the dropcap/first line sit under it. Height kept the same, so the
+     bottom edge moves too (12.73in -> 12.90in), still a clear 0.31in
+     above where the bottom row starts (13.213in). */
   position:absolute;
-  left:2.50in; top:6.28in; width:6.70in; height:6.45in;
+  left:2.50in; top:6.45in; width:6.70in; height:6.45in;
   display:flex; flex-direction:column; justify-content:center;
   z-index:2;
   --k:1;
@@ -161,9 +172,14 @@ main{
 .sig .sig-img{position:static !important; margin:0 auto;}
 .sig .rule{border-top:0.75pt dashed #000; width:100%; margin:0.06in auto 0.07in;}
 .sig p{margin:0; font-size:14pt; line-height:1.35;}
-.sig-left{left:0.7546in; top:14.1554in; width:3.1253in;}
+/* Both dropped 0.75in (14.1554in -> 14.9054in, 13.8480in -> 14.5980in),
+   keeping the pair's own alignment (their sig-img bottoms sit ~0.06in
+   apart, same as before the shift) — at their left/right positions the
+   new chain artwork's bottom row of medallions doesn't clear until
+   ~14.52in down the sheet, so the old tops sat right under it. */
+.sig-left{left:0.7546in; top:14.9054in; width:3.1253in;}
 .sig-left .sig-img{width:2.6561in; height:0.6447in;}
-.sig-right{left:7.9724in; top:13.8480in; width:3.1253in;}
+.sig-right{left:7.9724in; top:14.5980in; width:3.1253in;}
 .sig-right .sig-img{width:2.5866in; height:1.0118in;}
 
 /* ---------- print --------------------------------------------------------- */
