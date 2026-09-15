@@ -100,14 +100,12 @@ main{
      PowerPoint's "shrink text on overflow", scales down (--k) when a long
      rank or Grand Lodge name needs more room.
 
-     Left/width pulled in ~0.5in per side (was 1.85in/8.00in) from the
-     color chain's own clear window, which is narrower than the old
-     line-art's even with --frame-scale-x widening the columns above —
-     the frame can't scale much past that without its edges clipping the
-     page, so this closes the rest of the gap so text never sits under
-     the medallions. */
+     Left/width re-measured against the current chain artwork's own clear
+     window (with --frame-scale-x above applied) — swapping the frame
+     image changes where its columns actually sit, so this box needs
+     rechecking whenever the artwork does. */
   position:absolute;
-  left:2.35in; top:6.28in; width:7.00in; height:6.45in;
+  left:2.50in; top:6.28in; width:6.70in; height:6.45in;
   display:flex; flex-direction:column; justify-content:center;
   z-index:2;
   --k:1;
